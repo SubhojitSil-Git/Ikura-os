@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ikura OS v2.0</title>
     <link rel="stylesheet" href="keo.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -74,8 +74,8 @@
 
         <div id="windows-container">
 
-            <div class="window" id="win-files" style="top: 100px; left: 150px; width: 600px; height: 450px;">
-                <div class="title-bar" onmousedown="os.dragStart(event, 'win-files')">
+            <div class="window" id="win-files" style="top: 50px; left: 100px; width: 600px; height: 450px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-files')" ontouchstart="os.dragStart(event, 'win-files')">
                     <div class="traffic-lights">
                         <div class="light red" onclick="os.close('win-files')"></div>
                         <div class="light yellow" onclick="os.minimize('win-files')"></div>
@@ -94,8 +94,8 @@
                 </div>
             </div>
 
-            <div class="window" id="win-settings" style="top: 120px; left: 350px; width: 400px; height: 350px;">
-                <div class="title-bar" onmousedown="os.dragStart(event, 'win-settings')">
+            <div class="window" id="win-settings" style="top: 60px; left: 150px; width: 400px; height: 350px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-settings')" ontouchstart="os.dragStart(event, 'win-settings')">
                     <div class="traffic-lights">
                         <div class="light red" onclick="os.close('win-settings')"></div>
                         <div class="light yellow" onclick="os.minimize('win-settings')"></div>
@@ -116,8 +116,8 @@
                 </div>
             </div>
 
-            <div class="window" id="win-browser" style="top: 50px; left: 80px; width: 850px; height: 550px;">
-                <div class="title-bar" onmousedown="os.dragStart(event, 'win-browser')">
+            <div class="window" id="win-browser" style="top: 40px; left: 40px; width: 850px; height: 550px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-browser')" ontouchstart="os.dragStart(event, 'win-browser')">
                     <div class="traffic-lights">
                         <div class="light red" onclick="os.close('win-browser')"></div>
                         <div class="light yellow" onclick="os.minimize('win-browser')"></div>
@@ -134,8 +134,8 @@
                 </div>
             </div>
 
-            <div class="window" id="win-terminal" style="top: 150px; left: 200px; width: 600px; height: 400px;">
-                <div class="title-bar" onmousedown="os.dragStart(event, 'win-terminal')">
+            <div class="window" id="win-terminal" style="top: 80px; left: 120px; width: 600px; height: 400px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-terminal')" ontouchstart="os.dragStart(event, 'win-terminal')">
                     <div class="traffic-lights">
                         <div class="light red" onclick="os.close('win-terminal')"></div>
                         <div class="light yellow" onclick="os.minimize('win-terminal')"></div>
@@ -155,8 +155,8 @@
                 </div>
             </div>
 
-            <div class="window" id="win-music" style="top: 200px; left: 400px; width: 350px; height: 480px;">
-                <div class="title-bar" onmousedown="os.dragStart(event, 'win-music')">
+            <div class="window" id="win-music" style="top: 70px; left: 200px; width: 350px; height: 480px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-music')" ontouchstart="os.dragStart(event, 'win-music')">
                     <div class="traffic-lights">
                         <div class="light red" onclick="os.close('win-music')"></div>
                         <div class="light yellow" onclick="os.minimize('win-music')"></div>
@@ -179,8 +179,8 @@
                 </div>
             </div>
 
-            <div class="window" id="win-video" style="top: 60px; left: 60px; width: 550px; height: 420px;">
-                <div class="title-bar" onmousedown="os.dragStart(event, 'win-video')">
+            <div class="window" id="win-video" style="top: 30px; left: 30px; width: 550px; height: 420px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-video')" ontouchstart="os.dragStart(event, 'win-video')">
                     <div class="traffic-lights">
                         <div class="light red" onclick="os.close('win-video')"></div>
                         <div class="light yellow" onclick="os.minimize('win-video')"></div>
@@ -199,8 +199,8 @@
                 </div>
             </div>
 
-            <div class="window" id="win-photos" style="top: 90px; left: 90px; width: 500px; height: 400px;">
-                <div class="title-bar" onmousedown="os.dragStart(event, 'win-photos')">
+            <div class="window" id="win-photos" style="top: 40px; left: 40px; width: 500px; height: 400px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-photos')" ontouchstart="os.dragStart(event, 'win-photos')">
                     <div class="traffic-lights">
                         <div class="light red" onclick="os.close('win-photos')"></div>
                         <div class="light yellow" onclick="os.minimize('win-photos')"></div>
@@ -212,7 +212,7 @@
             </div>
 
             <div class="window" id="win-preview" style="top: 50%; left: 50%; width: 600px; height: 500px; opacity:0; pointer-events:none; z-index: 9999;">
-                <div class="title-bar" onmousedown="os.dragStart(event, 'win-preview')">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-preview')" ontouchstart="os.dragStart(event, 'win-preview')">
                     <div class="traffic-lights">
                         <div class="light red" onclick="os.close('win-preview')"></div>
                         <div class="light yellow"></div>
@@ -225,8 +225,8 @@
                 </div>
             </div>
 
-            <div class="window" id="win-notes" style="top: 150px; left: 550px; width: 350px; height: 300px;">
-                <div class="title-bar" onmousedown="os.dragStart(event, 'win-notes')">
+            <div class="window" id="win-notes" style="top: 90px; left: 350px; width: 350px; height: 300px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-notes')" ontouchstart="os.dragStart(event, 'win-notes')">
                     <div class="traffic-lights">
                         <div class="light red" onclick="os.close('win-notes')"></div>
                         <div class="light yellow" onclick="os.minimize('win-notes')"></div>
