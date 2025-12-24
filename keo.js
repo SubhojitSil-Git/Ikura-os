@@ -102,14 +102,14 @@ const os = {
             moveAt(pageX, pageY); 
         }
 
-        // Mouse listeners
+      
         document.addEventListener('mousemove', onMouseMove);
         document.onmouseup = function() {
             document.removeEventListener('mousemove', onMouseMove);
             document.onmouseup = null;
         };
 
-        // Touch listeners
+     
         document.addEventListener('touchmove', onMouseMove, {passive: false});
         document.ontouchend = function() {
             document.removeEventListener('touchmove', onMouseMove);
@@ -267,7 +267,7 @@ musicApp.init();
 
 const videoApp = {
     playlist: [
-        { title: "Demo Video", src: "video.mp4" }
+        { title: "Demo Video", src: "vid1.mp4" }
     ],
     init: () => { videoApp.render(); },
     add: (name, url) => {
@@ -320,3 +320,4 @@ const notesApp = {
     save: () => localStorage.setItem('ikura_notes', document.getElementById('notes-input').value)
 };
 document.getElementById('notes-input').value = localStorage.getItem('ikura_notes') || '';
+
