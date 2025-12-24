@@ -1,8 +1,6 @@
-
 setInterval(() => {
     document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit' });
 }, 1000);
-
 
 document.addEventListener('click', (e) => {
     const cc = document.getElementById('control-center');
@@ -10,12 +8,10 @@ document.addEventListener('click', (e) => {
     const menus = document.querySelectorAll('.dropdown');
     const menuTriggers = document.querySelectorAll('.menu-item-wrap');
     
-  
     if (!cc.contains(e.target) && !trigger.contains(e.target)) {
         cc.classList.remove('open');
     }
     
-
     let clickedMenu = false;
     menuTriggers.forEach(mt => { if(mt.contains(e.target)) clickedMenu = true; });
     
@@ -23,7 +19,6 @@ document.addEventListener('click', (e) => {
         menus.forEach(m => m.classList.remove('show'));
     }
 });
-
 
 let zIndex = 100;
 const os = {
@@ -70,10 +65,22 @@ const os = {
     dragStart: (e, id) => {
         const win = document.getElementById(id);
         os.focus(id);
-        let shiftX = e.clientX - win.getBoundingClientRect().left;
-        let shiftY = e.clientY - win.getBoundingClientRect().top;
+        
+        // Handle both Mouse and Touch events
+        let clientX = e.clientX;
+        let clientY = e.clientY;
+        if(!clientX && e.touches) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        }
+
+        let shiftX = clientX - win.getBoundingClientRect().left;
+        let shiftY = clientY - win.getBoundingClientRect().top;
         
         function moveAt(pageX, pageY) {
+            // Prevent dragging off screen at top
+            if (pageY < 0) pageY = 0;
+
             if(id === 'win-preview') {
                  win.style.left = pageX - shiftX + 'px';
                  win.style.top = pageY - shiftY + 'px';
@@ -83,16 +90,34 @@ const os = {
                 win.style.top = pageY - shiftY + 'px';
             }
         }
-        function onMouseMove(event) { moveAt(event.clientX, event.clientY); }
+
+        function onMouseMove(event) {
+            let pageX = event.clientX;
+            let pageY = event.clientY;
+            // Support touch move
+            if(!pageX && event.touches) {
+                pageX = event.touches[0].clientX;
+                pageY = event.touches[0].clientY;
+            }
+            moveAt(pageX, pageY); 
+        }
+
+        // Mouse listeners
         document.addEventListener('mousemove', onMouseMove);
         document.onmouseup = function() {
             document.removeEventListener('mousemove', onMouseMove);
             document.onmouseup = null;
         };
+
+        // Touch listeners
+        document.addEventListener('touchmove', onMouseMove, {passive: false});
+        document.ontouchend = function() {
+            document.removeEventListener('touchmove', onMouseMove);
+            document.ontouchend = null;
+        };
     },
     toggleControlCenter: () => document.getElementById('control-center').classList.toggle('open'),
     toggleMenu: (id) => {
-     
         document.querySelectorAll('.dropdown').forEach(d => {
             if(d.id !== id) d.classList.remove('show');
         });
@@ -101,9 +126,7 @@ const os = {
     setBrightness: (val) => document.getElementById('desktop').style.filter = `brightness(${val}%)`
 };
 
-
 const systemFiles = [];
-
 const filesApp = {
     handleUpload: (input) => {
         const files = Array.from(input.files);
@@ -112,16 +135,11 @@ const filesApp = {
             const type = file.type.startsWith('image') ? 'image' : 
                          file.type.startsWith('audio') ? 'audio' :
                          file.type.startsWith('video') ? 'video' : 'unknown';
-            
-          
             systemFiles.push({ name: file.name, url: url, type: type });
-            
-           
             if(type === 'image') photoApp.add(url);
             if(type === 'audio') musicApp.add(file.name, url);
             if(type === 'video') videoApp.add(file.name, url);
         });
-        
         filesApp.render();
         input.value = ''; 
     },
@@ -132,7 +150,6 @@ const filesApp = {
             if(f.type === 'image') icon = 'fa-file-image';
             if(f.type === 'audio') icon = 'fa-file-audio';
             if(f.type === 'video') icon = 'fa-file-video';
-            
             return `
             <div class="file-icon" onclick="filesApp.openFile('${f.url}', '${f.type}')">
                 <i class="fas ${icon}"></i>
@@ -154,10 +171,8 @@ const filesApp = {
     }
 };
 
-
 const settingsApp = {
     defaultWp: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=1920&q=80',
-    
     setWallpaper: (input) => {
         const file = input.files[0];
         if(!file) return;
@@ -170,26 +185,21 @@ const settingsApp = {
         };
         reader.readAsDataURL(file);
     },
-    
     reset: () => {
         localStorage.removeItem('ikura_wp');
         settingsApp.apply(settingsApp.defaultWp);
         document.getElementById('wp-upload').value = ""; 
     },
-    
     apply: (url) => {
         document.getElementById('desktop').style.backgroundImage = `url('${url}')`;
         document.getElementById('wp-preview').style.backgroundImage = `url('${url}')`;
     },
-    
     loadSaved: () => {
         const saved = localStorage.getItem('ikura_wp');
         settingsApp.apply(saved ? saved : settingsApp.defaultWp);
     }
 };
-
 settingsApp.loadSaved();
-
 
 const browserApp = {
     go: () => {
@@ -201,7 +211,6 @@ const browserApp = {
     }
 };
 
-
 const musicApp = {
     playlist: [
         { title: "Demo Song", src: "Track1.mp3" } 
@@ -209,11 +218,7 @@ const musicApp = {
     idx: 0,
     audio: new Audio(),
     isPlaying: false,
-
-    init: () => {
-        musicApp.renderList();
-        
-    },
+    init: () => { musicApp.renderList(); },
     add: (name, url) => {
         musicApp.playlist.push({ title: name, src: url });
         musicApp.renderList();
@@ -235,7 +240,7 @@ const musicApp = {
         document.getElementById('play-btn').innerHTML = '<i class="fas fa-pause"></i>';
     },
     toggle: () => {
-        if (!musicApp.audio.src) return; // Do nothing if no song loaded
+        if (!musicApp.audio.src) return; 
         if(musicApp.isPlaying) {
             musicApp.audio.pause();
             musicApp.isPlaying = false;
@@ -260,13 +265,10 @@ const musicApp = {
 };
 musicApp.init();
 
-
 const videoApp = {
-  
     playlist: [
         { title: "Demo Video", src: "video.mp4" }
     ],
-    
     init: () => { videoApp.render(); },
     add: (name, url) => {
         videoApp.playlist.push({ title: name, src: url });
@@ -292,11 +294,8 @@ const videoApp = {
 };
 videoApp.init();
 
-
 const photoApp = {
-    
     list: ["pic1.jpg", "pic2.jpg"],
-    
     init: () => { photoApp.render(); },
     add: (url) => {
         photoApp.list.push(url);
@@ -316,8 +315,6 @@ const photoApp = {
     }
 };
 photoApp.init();
-photoApp.init();
-
 
 const notesApp = {
     save: () => localStorage.setItem('ikura_notes', document.getElementById('notes-input').value)
