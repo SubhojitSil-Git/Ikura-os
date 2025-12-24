@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ikura OS v2.0</title>
+    <link rel="stylesheet" href="keo.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="orientation-lock">
+        <div class="lock-content">
+            <div class="rotate-icon">⟳</div>
+            <h2>Ikura OS</h2>
+            <p>Please rotate your device to landscape mode.</p>
+        </div>
+    </div>
+
+    <div id="desktop">
+        
+        <div class="menu-bar">
+            <div class="left-menu">
+                <span class="apple-logo"><i class="fas fa-circle-notch"></i></span>
+                <span class="apple-logo">💜</span>
+                <span class="bold">Ikura OS</span>
+                
+                <div class="menu-item-wrap">
+                    <span onclick="os.toggleMenu('menu-file')">File</span>
+                    <div class="dropdown" id="menu-file">
+                        <div onclick="os.open('win-files')">Open Files...</div>
+                        <div onclick="os.open('win-settings')">System Settings</div>
+                    </div>
+                </div>
+
+                <div class="menu-item-wrap">
+                    <span onclick="os.toggleMenu('menu-window')">Window</span>
+                    <div class="dropdown" id="menu-window">
+                        <div onclick="os.minimizeAll()">Minimize All</div>
+                        <div onclick="os.closeAll()">Close All</div>
+                    </div>
+                </div>
+
+                <div class="menu-item-wrap">
+                    <span onclick="os.toggleMenu('menu-help')">Help</span>
+                    <div class="dropdown" id="menu-help">
+                        <div onclick="alert('Ikura OS v5.0\nA Tribute to someone special\nCreated by Subhojit.')">About</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-menu">
+                <div class="status-group" id="status-trigger" onclick="os.toggleControlCenter()">
+                    <span class="status-item"><i class="fas fa-battery-full"></i> 100%</span>
+                    <span class="status-item"><i class="fas fa-wifi"></i></span>
+                    <span class="status-item" id="clock">12:00 PM</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="control-center">
+            <div class="cc-grid">
+                <div class="cc-block toggles">
+                    <div class="cc-btn active" onclick="this.classList.toggle('active')"><i class="fas fa-wifi"></i></div>
+                    <div class="cc-btn active" onclick="this.classList.toggle('active')"><i class="fab fa-bluetooth-b"></i></div>
+                    <div class="cc-btn" onclick="this.classList.toggle('active')"><i class="fas fa-plane"></i></div>
+                </div>
+                <div class="cc-block brightness">
+                    <span>Brightness</span>
+                    <input type="range" min="50" max="100" value="100" oninput="os.setBrightness(this.value)">
+                </div>
+            </div>
+        </div>
+
+        <div id="windows-container">
+
+            <div class="window" id="win-files" style="top: 100px; left: 150px; width: 600px; height: 450px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-files')">
+                    <div class="traffic-lights">
+                        <div class="light red" onclick="os.close('win-files')"></div>
+                        <div class="light yellow" onclick="os.minimize('win-files')"></div>
+                        <div class="light green"></div>
+                    </div>
+                    <span class="title">My Files</span>
+                </div>
+                <div class="window-content files-body">
+                    <div class="files-toolbar">
+                        <label for="file-upload-input" class="upload-btn"><i class="fas fa-cloud-upload-alt"></i> Upload File</label>
+                        <input type="file" id="file-upload-input" hidden multiple onchange="filesApp.handleUpload(this)">
+                        <span style="font-size: 11px; color: #888; margin-left: 10px;">(Auto-sorts to Music/Video/Photo apps)</span>
+                    </div>
+                    <div class="files-grid" id="files-list">
+                        </div>
+                </div>
+            </div>
+
+            <div class="window" id="win-settings" style="top: 120px; left: 350px; width: 400px; height: 350px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-settings')">
+                    <div class="traffic-lights">
+                        <div class="light red" onclick="os.close('win-settings')"></div>
+                        <div class="light yellow" onclick="os.minimize('win-settings')"></div>
+                        <div class="light green"></div>
+                    </div>
+                    <span class="title">Settings</span>
+                </div>
+                <div class="window-content settings-body">
+                    <h3>Desktop Background</h3>
+                    <div class="wallpaper-preview" id="wp-preview"></div>
+                    
+                    <label style="font-size: 12px; font-weight: bold;">Change Wallpaper:</label>
+                    <input type="file" id="wp-upload" accept="image/*" onchange="settingsApp.setWallpaper(this)">
+                    
+                    <hr style="width:100%; border:0; border-top:1px solid #ddd; margin: 10px 0;">
+                    
+                    <button class="btn-danger" onclick="settingsApp.reset()">Reset to Default Wallpaper</button>
+                </div>
+            </div>
+
+            <div class="window" id="win-browser" style="top: 50px; left: 80px; width: 850px; height: 550px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-browser')">
+                    <div class="traffic-lights">
+                        <div class="light red" onclick="os.close('win-browser')"></div>
+                        <div class="light yellow" onclick="os.minimize('win-browser')"></div>
+                        <div class="light green"></div>
+                    </div>
+                    <span class="title">Web Browser</span>
+                </div>
+                <div class="window-content browser-body">
+                    <div class="browser-nav">
+                        <input type="text" id="browser-url" placeholder="Search..." value="https://www.bing.com">
+                        <button onclick="browserApp.go()">Go</button>
+                    </div>
+                    <iframe id="browser-frame" src="https://www.wikipedia.com"></iframe>
+                </div>
+            </div>
+
+            <div class="window" id="win-terminal" style="top: 150px; left: 200px; width: 600px; height: 400px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-terminal')">
+                    <div class="traffic-lights">
+                        <div class="light red" onclick="os.close('win-terminal')"></div>
+                        <div class="light yellow" onclick="os.minimize('win-terminal')"></div>
+                        <div class="light green"></div>
+                    </div>
+                    <span class="title">Terminal</span>
+                </div>
+                <div class="window-content terminal-body" onclick="document.getElementById('cmd-input').focus()">
+                    <div id="term-output">
+                        <div>Welcome to Ikura OS v5.0</div>
+                        <div>Type <strong>help</strong> for commands.</div><br>
+                    </div>
+                    <div class="input-line">
+                        <span class="prompt">admin@ikura:~$</span>
+                        <input type="text" id="cmd-input" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+
+            <div class="window" id="win-music" style="top: 200px; left: 400px; width: 350px; height: 480px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-music')">
+                    <div class="traffic-lights">
+                        <div class="light red" onclick="os.close('win-music')"></div>
+                        <div class="light yellow" onclick="os.minimize('win-music')"></div>
+                        <div class="light green"></div>
+                    </div>
+                    <span class="title">Music</span>
+                </div>
+                <div class="window-content music-body">
+                    <div class="album-art"><i class="fas fa-music"></i></div>
+                    <div class="song-info">
+                        <h3 id="music-title">No Song Playing</h3>
+                        <p>Library</p>
+                    </div>
+                    <div class="music-controls">
+                        <button onclick="musicApp.prev()"><i class="fas fa-step-backward"></i></button>
+                        <button onclick="musicApp.toggle()" id="play-btn"><i class="fas fa-play"></i></button>
+                        <button onclick="musicApp.next()"><i class="fas fa-step-forward"></i></button>
+                    </div>
+                    <div class="playlist" id="music-list"></div>
+                </div>
+            </div>
+
+            <div class="window" id="win-video" style="top: 60px; left: 60px; width: 550px; height: 420px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-video')">
+                    <div class="traffic-lights">
+                        <div class="light red" onclick="os.close('win-video')"></div>
+                        <div class="light yellow" onclick="os.minimize('win-video')"></div>
+                        <div class="light green"></div>
+                    </div>
+                    <span class="title">Video Player</span>
+                </div>
+                <div class="window-content video-body">
+                    <video id="video-element" style="width:100%; height:calc(100% - 40px); background:black;" controls>
+                        <source src="" type="video/mp4">
+                    </video>
+                    <div class="video-list-container">
+                        <div class="video-list-title">Playlist</div>
+                        <div id="video-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="window" id="win-photos" style="top: 90px; left: 90px; width: 500px; height: 400px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-photos')">
+                    <div class="traffic-lights">
+                        <div class="light red" onclick="os.close('win-photos')"></div>
+                        <div class="light yellow" onclick="os.minimize('win-photos')"></div>
+                        <div class="light green"></div>
+                    </div>
+                    <span class="title">Gallery</span>
+                </div>
+                <div class="window-content photos-body" id="photo-grid"></div>
+            </div>
+
+            <div class="window" id="win-preview" style="top: 50%; left: 50%; width: 600px; height: 500px; opacity:0; pointer-events:none; z-index: 9999;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-preview')">
+                    <div class="traffic-lights">
+                        <div class="light red" onclick="os.close('win-preview')"></div>
+                        <div class="light yellow"></div>
+                        <div class="light green"></div>
+                    </div>
+                    <span class="title">Preview</span>
+                </div>
+                <div class="window-content" style="background: black; display:flex; align-items:center; justify-content:center; height: 100%;">
+                    <img id="preview-img" src="" style="max-width:100%; max-height:100%; object-fit:contain;">
+                </div>
+            </div>
+
+            <div class="window" id="win-notes" style="top: 150px; left: 550px; width: 350px; height: 300px;">
+                <div class="title-bar" onmousedown="os.dragStart(event, 'win-notes')">
+                    <div class="traffic-lights">
+                        <div class="light red" onclick="os.close('win-notes')"></div>
+                        <div class="light yellow" onclick="os.minimize('win-notes')"></div>
+                        <div class="light green"></div>
+                    </div>
+                    <span class="title">Notes</span>
+                </div>
+                <div class="window-content">
+                    <textarea class="notes-area" id="notes-input" placeholder="Type here... (Auto-Saved)" oninput="notesApp.save()"></textarea>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="dock-wrapper">
+            <div class="dock">
+                <div class="dock-item" onclick="os.open('win-files')" title="Files"><div class="dock-icon" style="background: #007aff"><i class="fas fa-folder"></i></div></div>
+                <div class="dock-item" onclick="os.open('win-settings')" title="Settings"><div class="dock-icon" style="background: #8e8e93"><i class="fas fa-cog"></i></div></div>
+                <div class="dock-separator"></div>
+                <div class="dock-item" onclick="os.open('win-browser')" title="Browser"><div class="dock-icon" style="background: #00a8ff"><i class="fas fa-globe"></i></div></div>
+                <div class="dock-item" onclick="os.open('win-terminal')" title="Terminal"><div class="dock-icon" style="background: #333"><i class="fas fa-terminal"></i></div></div>
+                <div class="dock-item" onclick="os.open('win-notes')" title="Notes"><div class="dock-icon" style="background: #ffcc00"><i class="fas fa-sticky-note"></i></div></div>
+                <div class="dock-separator"></div>
+                <div class="dock-item" onclick="os.open('win-music')" title="Music"><div class="dock-icon" style="background: #ff2d55"><i class="fas fa-music"></i></div></div>
+                <div class="dock-item" onclick="os.open('win-video')" title="Video"><div class="dock-icon" style="background: #5ac8fa"><i class="fas fa-film"></i></div></div>
+                <div class="dock-item" onclick="os.open('win-photos')" title="Gallery"><div class="dock-icon" style="background: linear-gradient(#ffcc00, #ff9500)"><i class="fas fa-images"></i></div></div>
+            </div>
+        </div>
+
+    </div>
+    <script src="keo.js"></script>
+</body>
+</html>
